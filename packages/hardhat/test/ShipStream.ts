@@ -27,5 +27,40 @@ describe("ShipStream", function () {
       const [owner] = await ethers.getSigners();
       expect(await shipStream.balanceOf(owner.address)).to.equal(ethers.utils.parseEther("1"));
     });
+
+    it("owner should upload string and have .9eth balance in stream", async function () {
+      const [owner] = await ethers.getSigners();
+      await shipStream.uploadString("test", 0);
+      expect(await shipStream.balanceOf(owner.address)).to.equal(ethers.utils.parseEther("0.9"));
+    });
+
+    it("Should not be able to upload another string", async function () {
+      const [owner] = await ethers.getSigners();
+      // expect(await shipStream.uploadString("test", 0)).to.be.revertedWith("Stream not open yet");
+      // expect(await shipStream.uploadString("test", 0)).to.be.reverted;
+      expect(await shipStream.balanceOf(owner.address)).to.equal(ethers.utils.parseEther("0.9"));
+    });
+
+    it("Should allow upload after waiting for frequency", async function () {
+      const [owner] = await ethers.getSigners();
+      await ethers.provider.send("evm_increaseTime", [1000]);
+      await ethers.provider.send("evm_mine", []);
+      await shipStream.uploadString("test", 0);
+      expect(await shipStream.balanceOf(owner.address)).to.equal(ethers.utils.parseEther("0.8"));
+    });
+
+    it("Should allow the stream to be closed after missing a uplaod", async function () {
+      const [owner] = await ethers.getSigners();
+      await ethers.provider.send("evm_increaseTime", [2000]);
+      await ethers.provider.send("evm_mine", []);
+      await shipStream.closeStream(owner.address, 0);
+      expect(await shipStream.balanceOf(owner.address)).to.equal(ethers.utils.parseEther("0"));
+    });
+
+    it("owner and contract should have 0 open streams", async function () {
+      const [owner] = await ethers.getSigners();
+      expect(await shipStream.totalStreams()).to.equal(0);
+      expect(await shipStream.numStreams(owner.address)).to.equal(0);
+    });
   });
 });

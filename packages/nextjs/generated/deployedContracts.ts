@@ -5,7 +5,7 @@ const contracts = {
       chainId: "31337",
       contracts: {
         YourContract: {
-          address: "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+          address: "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
           abi: [
             {
               inputs: [
@@ -147,7 +147,7 @@ const contracts = {
           ],
         },
         ShipStream: {
-          address: "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+          address: "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82",
           abi: [
             {
               inputs: [
@@ -161,6 +161,99 @@ const contracts = {
               type: "constructor",
             },
             {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "streamCreator",
+                  type: "address",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "duration",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "frequency",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "pardons",
+                  type: "uint256",
+                },
+              ],
+              name: "StreamCreated",
+              type: "event",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "streamCreator",
+                  type: "address",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "stream",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "string",
+                  name: "upload",
+                  type: "string",
+                },
+              ],
+              name: "StringUploaded",
+              type: "event",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "user",
+                  type: "address",
+                },
+              ],
+              name: "balanceOf",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "user",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "stream",
+                  type: "uint256",
+                },
+              ],
+              name: "closeStream",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
               inputs: [
                 {
                   internalType: "uint256",
@@ -172,10 +265,34 @@ const contracts = {
                   name: "frequency",
                   type: "uint256",
                 },
+                {
+                  internalType: "uint256",
+                  name: "pardons",
+                  type: "uint256",
+                },
               ],
               name: "createStream",
               outputs: [],
               stateMutability: "payable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "user",
+                  type: "address",
+                },
+              ],
+              name: "numStreams",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
               type: "function",
             },
             {
@@ -186,6 +303,92 @@ const contracts = {
                   internalType: "address",
                   name: "",
                   type: "address",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "user",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "stream",
+                  type: "uint256",
+                },
+              ],
+              name: "streamOf",
+              outputs: [
+                {
+                  components: [
+                    {
+                      internalType: "uint256",
+                      name: "duration",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "frequency",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "startTime",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "endTime",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "startBalance",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "currentBalance",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "string[]",
+                      name: "uploads",
+                      type: "string[]",
+                    },
+                    {
+                      internalType: "bool",
+                      name: "active",
+                      type: "bool",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "pardons",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "pardonsUsed",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "streamed",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "totalStreams",
+                      type: "uint256",
+                    },
+                  ],
+                  internalType: "struct ShipStream.Stream",
+                  name: "",
+                  type: "tuple",
                 },
               ],
               stateMutability: "view",
@@ -236,6 +439,112 @@ const contracts = {
                   name: "currentBalance",
                   type: "uint256",
                 },
+                {
+                  internalType: "bool",
+                  name: "active",
+                  type: "bool",
+                },
+                {
+                  internalType: "uint256",
+                  name: "pardons",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "pardonsUsed",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "streamed",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "totalStreams",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "user",
+                  type: "address",
+                },
+              ],
+              name: "streamsOf",
+              outputs: [
+                {
+                  components: [
+                    {
+                      internalType: "uint256",
+                      name: "duration",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "frequency",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "startTime",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "endTime",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "startBalance",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "currentBalance",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "string[]",
+                      name: "uploads",
+                      type: "string[]",
+                    },
+                    {
+                      internalType: "bool",
+                      name: "active",
+                      type: "bool",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "pardons",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "pardonsUsed",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "streamed",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "totalStreams",
+                      type: "uint256",
+                    },
+                  ],
+                  internalType: "struct ShipStream.Stream[]",
+                  name: "",
+                  type: "tuple[]",
+                },
               ],
               stateMutability: "view",
               type: "function",
@@ -259,6 +568,11 @@ const contracts = {
                   internalType: "string",
                   name: "upload",
                   type: "string",
+                },
+                {
+                  internalType: "uint256",
+                  name: "stream",
+                  type: "uint256",
                 },
               ],
               name: "uploadString",
