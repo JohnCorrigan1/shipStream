@@ -5,7 +5,7 @@ const contracts = {
       chainId: "31337",
       contracts: {
         YourContract: {
-          address: "0x9A676e781A523b5d0C0e43731313A708CB607508",
+          address: "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1",
           abi: [
             {
               inputs: [
@@ -147,7 +147,7 @@ const contracts = {
           ],
         },
         ShipStream: {
-          address: "0x0B306BF915C4d645ff596e518fAf3F9669b97016",
+          address: "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44",
           abi: [
             {
               inputs: [
@@ -239,12 +239,12 @@ const contracts = {
               inputs: [
                 {
                   internalType: "address",
-                  name: "user",
+                  name: "_user",
                   type: "address",
                 },
                 {
                   internalType: "uint256",
-                  name: "stream",
+                  name: "_index",
                   type: "uint256",
                 },
               ],
@@ -274,6 +274,30 @@ const contracts = {
               name: "createStream",
               outputs: [],
               stateMutability: "payable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "_user",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "_index",
+                  type: "uint256",
+                },
+              ],
+              name: "isCloseable",
+              outputs: [
+                {
+                  internalType: "bool",
+                  name: "",
+                  type: "bool",
+                },
+              ],
+              stateMutability: "view",
               type: "function",
             },
             {
@@ -361,21 +385,6 @@ const contracts = {
                       type: "string[]",
                     },
                     {
-                      internalType: "bool",
-                      name: "active",
-                      type: "bool",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "pardons",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "pardonsUsed",
-                      type: "uint256",
-                    },
-                    {
                       internalType: "uint256",
                       name: "streamed",
                       type: "uint256",
@@ -440,21 +449,6 @@ const contracts = {
                   type: "uint256",
                 },
                 {
-                  internalType: "bool",
-                  name: "active",
-                  type: "bool",
-                },
-                {
-                  internalType: "uint256",
-                  name: "pardons",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "pardonsUsed",
-                  type: "uint256",
-                },
-                {
                   internalType: "uint256",
                   name: "streamed",
                   type: "uint256",
@@ -514,21 +508,6 @@ const contracts = {
                       internalType: "string[]",
                       name: "uploads",
                       type: "string[]",
-                    },
-                    {
-                      internalType: "bool",
-                      name: "active",
-                      type: "bool",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "pardons",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "pardonsUsed",
-                      type: "uint256",
                     },
                     {
                       internalType: "uint256",

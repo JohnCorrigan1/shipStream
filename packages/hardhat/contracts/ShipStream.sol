@@ -16,9 +16,6 @@ contract ShipStream {
     uint256 startBalance;
     uint256 currentBalance;
     string[] uploads;
-    bool active;
-    uint256 pardons;
-    uint256 pardonsUsed;
     uint256 streamed;
     uint256 totalStreams;
   }
@@ -51,81 +48,65 @@ contract ShipStream {
     require(pardons <= duration / frequency, "Pardons must be less than or equal to duration / frequency");
     require(duration % frequency == 0, "Duration must be divisible by frequency");
 
-    Stream memory stream = Stream({
-      duration: duration,
-      frequency: frequency,
-      startTime: block.timestamp,
-      endTime: block.timestamp + duration,
-      startBalance: msg.value,
-      currentBalance: msg.value,
-      uploads: new string[](0),
-      active: true,
-      pardons: pardons,
-      pardonsUsed: 0,
-      streamed: 0,
-      totalStreams: duration / frequency
-    });
+    Stream memory stream = Stream(
+      duration,
+      frequency,
+      block.timestamp,
+      block.timestamp + duration,
+      msg.value,
+      msg.value,
+      new string[](0),
+      0,
+      duration / frequency
+    );
     streams[msg.sender].push(stream);
     totalStreams += 1;
     emit StreamCreated(msg.sender, duration, frequency, pardons);
   }
 
-  function uploadString(string memory upload, uint stream) public {
-    require(streams[msg.sender][stream].active, "Stream is not active");
-    require(streams[msg.sender][stream].endTime > block.timestamp, "Stream has ended");
-    require(streams[msg.sender][stream].currentBalance > 0, "Stream has no balance");
-    require(streams[msg.sender][stream].streamed < streams[msg.sender][stream].totalStreams, "Stream has ended");
-    require(
-      streams[msg.sender][stream].streamed *
-        streams[msg.sender][stream].frequency +
-        streams[msg.sender][stream].startTime <
-        block.timestamp,
-      "Stream not open yet"
-    );
-    // require(
-    // streams[msg.sender][stream].streamed *
-    // streams[msg.sender][stream].frequency +
-    // streams[msg.sender][stream].frequency >
-    // block.timestamp,
-    // "Stream not open yet 2"
-    // );
+  function uploadString(string memory _upload, uint _index) public {
+    require(streams[msg.sender][_index].endTime > block.timestamp, "Stream has ended");
+    require(streams[msg.sender][_index].currentBalance > 0, "Stream has no balance");
+    require(streams[msg.sender][_index].streamed < streams[msg.sender][_index].totalStreams, "Stream has ended");
+    require(streamOpen(msg.sender, _index), "Stream not open yet");
 
     //push string add to streams
-    streams[msg.sender][stream].uploads.push(upload);
-    streams[msg.sender][stream].streamed += 1;
+    streams[msg.sender][_index].uploads.push(_upload);
+    streams[msg.sender][_index].streamed += 1;
     //subtract from bal
-    streams[msg.sender][stream].currentBalance -=
-      streams[msg.sender][stream].startBalance /
-      streams[msg.sender][stream].totalStreams;
+    streams[msg.sender][_index].currentBalance -=
+      streams[msg.sender][_index].startBalance /
+      streams[msg.sender][_index].totalStreams;
 
     //send subtracted balance to msg.sender
-    payable(msg.sender).transfer(streams[msg.sender][stream].startBalance / streams[msg.sender][stream].totalStreams);
-    emit StringUploaded(msg.sender, stream, upload);
+    payable(msg.sender).transfer(streams[msg.sender][_index].startBalance / streams[msg.sender][_index].totalStreams);
+    emit StringUploaded(msg.sender, _index, _upload);
   }
 
-  function closeStream(address user, uint stream) public {
+  function closeStream(address _user, uint _index) public {
     //if they missed a stream
-    //maybe add the pardons here?
-    require(
-      streams[user][stream].streamed *
-        streams[user][stream].frequency +
-        streams[user][stream].startTime +
-        streams[user][stream].frequency <
-        block.timestamp,
-      "Stream still open"
-    );
+    require(isCloseable(_user, _index), "Stream still open");
+
     //send 10% of current balance to msg.sender rest goes to public goods aka me im good no cap
-    (bool callerSuccess, ) = msg.sender.call{value: streams[user][stream].currentBalance / 10}("");
+    (bool callerSuccess, ) = msg.sender.call{value: streams[_user][_index].currentBalance / 10}("");
     require(callerSuccess, "Transfer failed.");
-    (bool goodsSuccess, ) = msg.sender.call{value: (streams[user][stream].currentBalance / 10) * 9}("");
+    (bool goodsSuccess, ) = msg.sender.call{value: (streams[_user][_index].currentBalance / 10) * 9}("");
     require(goodsSuccess, "Transfer failed.");
 
     //remove stream from array of streams
     totalStreams -= 1;
-    for (uint i = stream; i < streams[user].length - 1; i++) {
-      streams[user][i] = streams[user][i + 1];
+    for (uint i = _index; i < streams[_user].length - 1; i++) {
+      streams[_user][i] = streams[_user][i + 1];
     }
-    streams[user].pop();
+    streams[_user].pop();
+  }
+
+  //helper function to check if stream is closeable
+  function isCloseable(address _user, uint _index) public view returns (bool) {
+    return ((streams[_user][_index].streamed * streams[_user][_index].frequency) +
+      streams[_user][_index].startTime +
+      streams[_user][_index].frequency <
+      block.timestamp);
   }
 
   function withdraw() public isOwner {}
@@ -144,12 +125,20 @@ contract ShipStream {
     return streams[user].length;
   }
 
+  //returns specific stream of an address
   function streamOf(address user, uint stream) public view returns (Stream memory) {
     return streams[user][stream];
   }
 
+  //returns all streams of an address
   function streamsOf(address user) public view returns (Stream[] memory) {
     return streams[user];
+  }
+
+  //helper function to determine if stream can be streamed yet aka in the window between frequencies
+  function streamOpen(address _user, uint _index) public view returns (bool) {
+    return (streams[_user][_index].streamed * streams[_user][_index].frequency + streams[_user][_index].startTime <
+      block.timestamp);
   }
 
   receive() external payable {}

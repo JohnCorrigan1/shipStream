@@ -36,8 +36,7 @@ describe("ShipStream", function () {
 
     it("Should not be able to upload another string", async function () {
       const [owner] = await ethers.getSigners();
-      // expect(await shipStream.uploadString("test", 0)).to.be.revertedWith("Stream not open yet");
-      // expect(await shipStream.uploadString("test", 0)).to.be.reverted;
+      await expect(shipStream.uploadString("test", 0)).to.be.revertedWith("Stream not open yet");
       expect(await shipStream.balanceOf(owner.address)).to.equal(ethers.utils.parseEther("0.9"));
     });
 
@@ -46,6 +45,14 @@ describe("ShipStream", function () {
       await ethers.provider.send("evm_increaseTime", [1000]);
       await ethers.provider.send("evm_mine", []);
       await shipStream.uploadString("test", 0);
+      expect(await shipStream.balanceOf(owner.address)).to.equal(ethers.utils.parseEther("0.8"));
+    });
+
+    it("Should not allow another upload after waiting for half frequency", async function () {
+      const [owner] = await ethers.getSigners();
+      await ethers.provider.send("evm_increaseTime", [500]);
+      await ethers.provider.send("evm_mine", []);
+      await expect(shipStream.uploadString("test", 0)).to.be.revertedWith("Stream not open yet");
       expect(await shipStream.balanceOf(owner.address)).to.equal(ethers.utils.parseEther("0.8"));
     });
 
