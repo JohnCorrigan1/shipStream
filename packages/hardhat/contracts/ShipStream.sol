@@ -8,8 +8,6 @@ pragma solidity >=0.8.0 <0.9.0;
 // import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract ShipStream {
-  // State Variables
-
   struct Stream {
     uint256 duration;
     uint256 frequency;
@@ -29,13 +27,9 @@ contract ShipStream {
   uint256 public totalStreams;
   mapping(address => Stream[]) public streams;
 
-  // Events: a way to emit log statements from smart contract that can be listened to by external parties
-  //   event GreetingChange(address indexed greetingSetter, string newGreeting, bool premium, uint256 value);
   event StreamCreated(address indexed streamCreator, uint256 duration, uint256 frequency, uint256 pardons);
   event StringUploaded(address indexed streamCreator, uint256 stream, string upload);
 
-  // Constructor: Called once on contract deployment
-  // Check packages/hardhat/deploy/00_deploy_your_contract.ts
   constructor(address _owner) {
     owner = _owner;
   }
@@ -120,13 +114,18 @@ contract ShipStream {
         block.timestamp,
       "Stream still open"
     );
-    //send 10% of current balance to msg.sender rest goes to public goods
-    payable(msg.sender).transfer(streams[user][stream].currentBalance / 10);
-    payable(owner).transfer((streams[user][stream].currentBalance / 10) * 9);
+    //send 10% of current balance to msg.sender rest goes to public goods aka me im good no cap
+    (bool callerSuccess, ) = msg.sender.call{value: streams[user][stream].currentBalance / 10}("");
+    require(callerSuccess, "Transfer failed.");
+    (bool goodsSuccess, ) = msg.sender.call{value: (streams[user][stream].currentBalance / 10) * 9}("");
+    require(goodsSuccess, "Transfer failed.");
 
     //remove stream from array of streams
     totalStreams -= 1;
-    delete streams[user][stream];
+    for (uint i = stream; i < streams[user].length - 1; i++) {
+      streams[user][i] = streams[user][i + 1];
+    }
+    streams[user].pop();
   }
 
   function withdraw() public isOwner {}
