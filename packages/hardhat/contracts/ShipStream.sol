@@ -9,6 +9,7 @@ pragma solidity >=0.8.0 <0.9.0;
 
 contract ShipStream {
   struct Stream {
+    string name;
     uint256 duration;
     uint256 frequency;
     uint256 startTime;
@@ -39,7 +40,7 @@ contract ShipStream {
     _;
   }
 
-  function createStream(uint256 duration, uint256 frequency) public payable {
+  function createStream(uint256 duration, uint256 frequency, string memory name) public payable {
     require(msg.value > 0, "Must send ether to create a stream");
     require(duration > 0, "Duration must be greater than 0");
     require(frequency > 0, "Frequency must be greater than 0");
@@ -47,6 +48,7 @@ contract ShipStream {
     require(duration % frequency == 0, "Duration must be divisible by frequency");
 
     Stream memory stream = Stream(
+      name,
       duration,
       frequency,
       block.timestamp,

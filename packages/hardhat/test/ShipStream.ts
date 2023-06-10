@@ -19,7 +19,7 @@ describe("ShipStream", function () {
     });
 
     it("should have 1 stream after creating", async function () {
-      await shipStream.createStream(10000, 1000, { value: ethers.utils.parseEther("1") });
+      await shipStream.createStream(10000, 1000, "test stream", { value: ethers.utils.parseEther("1") });
       expect(await shipStream.totalStreams()).to.equal(1);
     });
 
