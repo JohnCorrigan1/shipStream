@@ -5,7 +5,7 @@ const contracts = {
       chainId: "31337",
       contracts: {
         YourContract: {
-          address: "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1",
+          address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
           abi: [
             {
               inputs: [
@@ -147,7 +147,7 @@ const contracts = {
           ],
         },
         ShipStream: {
-          address: "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44",
+          address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
           abi: [
             {
               inputs: [
@@ -179,12 +179,6 @@ const contracts = {
                   indexed: false,
                   internalType: "uint256",
                   name: "frequency",
-                  type: "uint256",
-                },
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "pardons",
                   type: "uint256",
                 },
               ],
@@ -263,11 +257,6 @@ const contracts = {
                 {
                   internalType: "uint256",
                   name: "frequency",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "pardons",
                   type: "uint256",
                 },
               ],
@@ -398,6 +387,30 @@ const contracts = {
                   internalType: "struct ShipStream.Stream",
                   name: "",
                   type: "tuple",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "_user",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "_index",
+                  type: "uint256",
+                },
+              ],
+              name: "streamOpen",
+              outputs: [
+                {
+                  internalType: "bool",
+                  name: "",
+                  type: "bool",
                 },
               ],
               stateMutability: "view",
@@ -545,12 +558,12 @@ const contracts = {
               inputs: [
                 {
                   internalType: "string",
-                  name: "upload",
+                  name: "_upload",
                   type: "string",
                 },
                 {
                   internalType: "uint256",
-                  name: "stream",
+                  name: "_index",
                   type: "uint256",
                 },
               ],

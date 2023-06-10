@@ -24,7 +24,7 @@ contract ShipStream {
   uint256 public totalStreams;
   mapping(address => Stream[]) public streams;
 
-  event StreamCreated(address indexed streamCreator, uint256 duration, uint256 frequency, uint256 pardons);
+  event StreamCreated(address indexed streamCreator, uint256 duration, uint256 frequency);
   event StringUploaded(address indexed streamCreator, uint256 stream, string upload);
 
   constructor(address _owner) {
@@ -39,13 +39,11 @@ contract ShipStream {
     _;
   }
 
-  function createStream(uint256 duration, uint256 frequency, uint256 pardons) public payable {
+  function createStream(uint256 duration, uint256 frequency) public payable {
     require(msg.value > 0, "Must send ether to create a stream");
     require(duration > 0, "Duration must be greater than 0");
     require(frequency > 0, "Frequency must be greater than 0");
-    require(pardons >= 0, "Pardons must be greater than or equal to 0");
     require(duration > frequency, "Duration must be greater than frequency");
-    require(pardons <= duration / frequency, "Pardons must be less than or equal to duration / frequency");
     require(duration % frequency == 0, "Duration must be divisible by frequency");
 
     Stream memory stream = Stream(
@@ -59,9 +57,10 @@ contract ShipStream {
       0,
       duration / frequency
     );
+
     streams[msg.sender].push(stream);
     totalStreams += 1;
-    emit StreamCreated(msg.sender, duration, frequency, pardons);
+    emit StreamCreated(msg.sender, duration, frequency);
   }
 
   function uploadString(string memory _upload, uint _index) public {

@@ -10,18 +10,14 @@ const ShipStreamInteraction: React.FC = () => {
   const { writeAsync } = useScaffoldContractWrite({
     contractName: "ShipStream",
     functionName: "createStream",
-    args: [
-      ethers.utils.parseEther(duration.toString()),
-      ethers.utils.parseEther(frequency.toString()),
-      ethers.utils.parseEther("0"),
-    ],
+    args: [ethers.utils.parseEther(duration.toString()), ethers.utils.parseEther(frequency.toString())],
     overrides: {
-      value: amount,
+      value: ethers.utils.parseEther(amount.toString()),
     },
   });
 
   return (
-    <div className="flex w-full h-full items-center justify-center gap-24 bg-red-300">
+    <div className="flex w-full h-full items-center justify-center">
       <div className="flex flex-col items-center justify-center bg-base-100 shadow-lg rounded-lg max-w-xl p-5">
         <h1>Create a Stream</h1>
         <p>
