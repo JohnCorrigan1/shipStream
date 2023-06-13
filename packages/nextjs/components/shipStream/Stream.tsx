@@ -20,9 +20,9 @@ const Stream = ({ stream, streamId }: StreamProps) => {
     args: [upload, ethers.utils.parseEther(streamId.toString())],
   });
 
-  const { data: uploads } = useScaffoldContractRead({
+  const { data: lastUpload } = useScaffoldContractRead({
     contractName: "ShipStream",
-    functionName: "uploadsOf",
+    functionName: "lastUploadOf",
     args: [address, ethers.utils.parseEther(streamId.toString())],
   });
 
@@ -57,7 +57,7 @@ const Stream = ({ stream, streamId }: StreamProps) => {
         <div className="flex flex-col gap-3 w-1/2">
           <div className="textarea textarea-bordered rounded-xl h-full w-full">
             <h2>Last Upload:</h2>
-            {uploads && uploads.length > 0 && <p>{uploads[uploads.length - 1]}</p>}
+            <p>{lastUpload}</p>
           </div>
 
           <button onClick={showModal} className="btn btn-primary">
@@ -65,7 +65,7 @@ const Stream = ({ stream, streamId }: StreamProps) => {
           </button>
         </div>
       </div>
-      {uploads && uploads.length > 0 && <UploadsModal modal={modal} />}
+      <UploadsModal modal={modal} streamId={streamId} />
     </div>
   );
 };

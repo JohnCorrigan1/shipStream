@@ -5,9 +5,10 @@ import { useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
 
 interface UploadsModalProps {
   modal: MutableRefObject<HTMLDialogElement | null>;
+  streamId: number;
 }
 
-const UploadsModal = ({ modal }: UploadsModalProps) => {
+const UploadsModal = ({ modal, streamId }: UploadsModalProps) => {
   const { address } = useAccount();
   const handleClose = () => {
     modal.current?.close();
@@ -23,7 +24,7 @@ const UploadsModal = ({ modal }: UploadsModalProps) => {
 
   useEffect(() => {
     if (uploadEvents) {
-      console.log(uploadEvents.filter(event => event.args[1].toString() == "0"));
+      console.log(uploadEvents.filter(event => event.args[1].toString() == streamId.toString()));
     }
   }, [uploadEvents]);
 

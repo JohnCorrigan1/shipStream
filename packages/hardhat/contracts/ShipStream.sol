@@ -137,6 +137,11 @@ contract ShipStream {
     return streams[user];
   }
 
+  //last upload of a specific stream of an address
+  function lastUploadOf(address user, uint stream) public view returns (string memory) {
+    return streams[user][stream].uploads[streams[user][stream].uploads.length - 1];
+  }
+
   //returns all uploads of a specific stream of an address
   function uploadsOf(address user, uint stream) public view returns (string[] memory) {
     return streams[user][stream].uploads;
