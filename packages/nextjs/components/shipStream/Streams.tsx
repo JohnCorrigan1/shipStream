@@ -1,4 +1,5 @@
 import Stream from "./Stream";
+import { StreamType } from "./StreamTypes";
 import { useAccount } from "wagmi";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
@@ -12,9 +13,9 @@ const Streams = () => {
   });
 
   return (
-    <div className="flex flex-col gap-3">
-      {streams?.map((stream: any, index: number) => (
-        <Stream stream={stream} key={index} />
+    <div className="flex flex-col gap-3 w-full">
+      {streams?.map((stream: StreamType, index) => (
+        <Stream streamId={index} stream={stream} key={stream.name} />
       ))}
     </div>
   );

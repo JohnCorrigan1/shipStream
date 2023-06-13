@@ -30,3 +30,8 @@ p {
 .btn.btn-ghost {
   @apply shadow-none;
 }
+
+dialog::backdrop {
+  background-color: black;
+  opacity: 0.65;
+}

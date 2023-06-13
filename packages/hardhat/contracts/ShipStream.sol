@@ -73,6 +73,7 @@ contract ShipStream {
 
     //push string add to streams
     streams[msg.sender][_index].uploads.push(_upload);
+    // streams[msg.sender][_index].uploads.push({upload: _upload, timestamp: block.timestamp});
     streams[msg.sender][_index].streamed += 1;
     //subtract from bal
     streams[msg.sender][_index].currentBalance -=
@@ -134,6 +135,11 @@ contract ShipStream {
   //returns all streams of an address
   function streamsOf(address user) public view returns (Stream[] memory) {
     return streams[user];
+  }
+
+  //returns all uploads of a specific stream of an address
+  function uploadsOf(address user, uint stream) public view returns (string[] memory) {
+    return streams[user][stream].uploads;
   }
 
   //helper function to determine if stream can be streamed yet aka in the window between frequencies

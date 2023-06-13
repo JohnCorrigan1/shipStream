@@ -5,7 +5,7 @@ const contracts = {
       chainId: "31337",
       contracts: {
         YourContract: {
-          address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+          address: "0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690",
           abi: [
             {
               inputs: [
@@ -147,7 +147,7 @@ const contracts = {
           ],
         },
         ShipStream: {
-          address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+          address: "0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB",
           abi: [
             {
               inputs: [
@@ -259,6 +259,11 @@ const contracts = {
                   name: "frequency",
                   type: "uint256",
                 },
+                {
+                  internalType: "string",
+                  name: "name",
+                  type: "string",
+                },
               ],
               name: "createStream",
               outputs: [],
@@ -338,6 +343,11 @@ const contracts = {
               outputs: [
                 {
                   components: [
+                    {
+                      internalType: "string",
+                      name: "name",
+                      type: "string",
+                    },
                     {
                       internalType: "uint256",
                       name: "duration",
@@ -432,6 +442,11 @@ const contracts = {
               name: "streams",
               outputs: [
                 {
+                  internalType: "string",
+                  name: "name",
+                  type: "string",
+                },
+                {
                   internalType: "uint256",
                   name: "duration",
                   type: "uint256",
@@ -487,6 +502,11 @@ const contracts = {
               outputs: [
                 {
                   components: [
+                    {
+                      internalType: "string",
+                      name: "name",
+                      type: "string",
+                    },
                     {
                       internalType: "uint256",
                       name: "duration",
@@ -570,6 +590,30 @@ const contracts = {
               name: "uploadString",
               outputs: [],
               stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "user",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "stream",
+                  type: "uint256",
+                },
+              ],
+              name: "uploadsOf",
+              outputs: [
+                {
+                  internalType: "string[]",
+                  name: "",
+                  type: "string[]",
+                },
+              ],
+              stateMutability: "view",
               type: "function",
             },
             {
