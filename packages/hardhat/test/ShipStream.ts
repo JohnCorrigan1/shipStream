@@ -69,5 +69,32 @@ describe("ShipStream", function () {
       expect(await shipStream.totalStreams()).to.equal(0);
       expect(await shipStream.numStreams(owner.address)).to.equal(0);
     });
+
+    it("Should allow owner to create another stream", async function () {
+      const [owner] = await ethers.getSigners();
+      await shipStream.createStream(10000, 1000, "test stream", { value: ethers.utils.parseEther("1") });
+      expect(await shipStream.totalStreams()).to.equal(1);
+      expect(await shipStream.numStreams(owner.address)).to.equal(1);
+    });
+
+    it("Should allow owner to create another stream", async function () {
+      const [owner] = await ethers.getSigners();
+      await shipStream.createStream(10000, 1000, "test stream", { value: ethers.utils.parseEther("1") });
+      expect(await shipStream.totalStreams()).to.equal(2);
+      expect(await shipStream.numStreams(owner.address)).to.equal(2);
+    });
+
+    it("Should allow owner to upload to 1st stream", async function () {
+      const [owner] = await ethers.getSigners();
+      await shipStream.uploadString("test", 0);
+      expect(await shipStream.balanceOf(owner.address)).to.equal(ethers.utils.parseEther("1.9"));
+    });
+
+    it("Should allow owner to upload to 2nd stream", async function () {
+      const [owner] = await ethers.getSigners();
+      await shipStream.uploadString("test", 1);
+      expect(await shipStream.balanceOf(owner.address)).to.equal(ethers.utils.parseEther("1.8"));
+      expect(await shipStream.streamedOf(owner.address, 1)).to.equal(1);
+    });
   });
 });

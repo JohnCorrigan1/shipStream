@@ -137,6 +137,16 @@ contract ShipStream {
     return streams[user];
   }
 
+  //number of streams streamed of an address
+  function streamedOf(address user, uint stream) public view returns (uint256) {
+    return streams[user][stream].streamed;
+  }
+
+  //number of total streams of an address
+  function totalStreamsOf(address user, uint stream) public view returns (uint256) {
+    return streams[user][stream].totalStreams;
+  }
+
   //last upload of a specific stream of an address
   function lastUploadOf(address user, uint stream) public view returns (string memory) {
     return streams[user][stream].uploads[streams[user][stream].uploads.length - 1];

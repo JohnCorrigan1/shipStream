@@ -17,7 +17,7 @@ const Stream = ({ stream, streamId }: StreamProps) => {
   const { writeAsync } = useScaffoldContractWrite({
     contractName: "ShipStream",
     functionName: "uploadString",
-    args: [upload, ethers.utils.parseEther(streamId.toString())],
+    args: [upload, ethers.BigNumber.from(streamId)],
   });
 
   const { data: lastUpload } = useScaffoldContractRead({
