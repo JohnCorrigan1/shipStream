@@ -1,13 +1,17 @@
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
+// import "./SafeMath.sol";
+
 // Useful for debugging. Remove when deploying to a live network.
 // import "hardhat/console.sol";
 
 // Use openzeppelin to inherit battle-tested implementations (ERC20, ERC721, etc)
 // import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract ShipStream {
+  using SafeMath for uint256;
   struct Stream {
     string name;
     uint256 duration;
@@ -69,7 +73,11 @@ contract ShipStream {
     require(streams[msg.sender][_index].endTime > block.timestamp, "Stream has ended");
     require(streams[msg.sender][_index].currentBalance > 0, "Stream has no balance");
     require(streams[msg.sender][_index].streamed < streams[msg.sender][_index].totalStreams, "Stream has ended");
-    require(streamOpen(msg.sender, _index), "Stream not open yet");
+    // require(streamable(msg.sender, _index), "Stream not open yet");
+    // require(streamable(_user, _index), "Stream missed");
+    // require(streamMissed(msg.sender, _index), "Stream missed");
+    require(ok(msg.sender, _index), "not ok");
+    require(missed(msg.sender, _index), "not missed");
 
     //push string add to streams
     streams[msg.sender][_index].uploads.push(_upload);
@@ -106,9 +114,9 @@ contract ShipStream {
   //helper function to check if stream is closeable
   function isCloseable(address _user, uint _index) public view returns (bool) {
     return ((streams[_user][_index].streamed * streams[_user][_index].frequency) +
-      streams[_user][_index].startTime +
+      (streams[_user][_index].startTime * 1000) +
       streams[_user][_index].frequency <
-      block.timestamp);
+      block.timestamp * 1000);
   }
 
   function withdraw() public isOwner {}
@@ -142,7 +150,6 @@ contract ShipStream {
     return streams[user][stream].streamed;
   }
 
-  //number of total streams of an address
   function totalStreamsOf(address user, uint stream) public view returns (uint256) {
     return streams[user][stream].totalStreams;
   }
@@ -159,8 +166,75 @@ contract ShipStream {
 
   //helper function to determine if stream can be streamed yet aka in the window between frequencies
   function streamOpen(address _user, uint _index) public view returns (bool) {
-    return (streams[_user][_index].streamed * streams[_user][_index].frequency + streams[_user][_index].startTime <
-      block.timestamp);
+    return (streams[_user][_index].streamed *
+      streams[_user][_index].frequency +
+      (streams[_user][_index].startTime * 1000) <
+      block.timestamp * 1000 &&
+      streams[_user][_index].streamed *
+        (streams[_user][_index].frequency - 1) +
+        (streams[_user][_index].startTime * 1000) <
+      block.timestamp * 1000);
+  }
+
+  function streamMissed(address _user, uint _index) public view returns (bool) {
+    return (streams[_user][_index].streamed *
+      streams[_user][_index].frequency +
+      (streams[_user][_index].startTime * 1000) +
+      streams[_user][_index].frequency >
+      block.timestamp * 1000);
+  }
+
+  function ok(address _user, uint _index) public view returns (bool) {
+    return (((block.timestamp - streams[_user][_index].startTime) * 1000) / streams[_user][_index].frequency >
+      streams[_user][_index].streamed ||
+      streams[_user][_index].streamed == 0);
+  }
+
+  // function missed(address _user, uint _index) public view returns (bool) {
+  //   return ((((block.timestamp - streams[_user][_index].startTime) * 1000) / streams[_user][_index].frequency) *
+  //     1000000 <
+  //     (streams[_user][_index].streamed + 1) * 1000000);
+  // }
+
+  function missed(address user, uint index) public view returns (bool) {
+    uint256 smaller = (((block.timestamp - streams[user][index].startTime) * 1000) / streams[user][index].frequency) *
+      1000000000;
+    uint256 bigger = (streams[user][index].streamed + 1) * 1000000000;
+
+    return smaller - bigger > 0;
+  }
+
+  // function getTimestamp(address user, uint index) public view returns (uint256) {
+  //   return block.timestamp - streams[user][index].startTime;
+  // }
+
+  // function missed(address _user, uint _index) public view returns (bool) {
+  //   uint256 lhs = ((block.timestamp - streams[_user][_index].startTime) * 1000) / streams[_user][_index].frequency;
+  //   uint256 rhs = (streams[_user][_index].streamed + 1) * 1000;
+
+  //   // return SafeMath.lt(lhs, rhs);
+  //   return lhs < rhs;
+  // }
+
+  // function missed(address _user, uint _index) public view returns (bool) {
+  //     uint256 lhs = ((block.timestamp - streams[_user][_index].startTime) * 1000) / streams[_user][_index].frequency;
+  //     uint256 rhs = (streams[_user][_index].streamed + 1) * 1000;
+
+  //     return lhs.safeSub(rhs);
+  // }
+
+  // function missed(address _user, uint _index) public view returns (bool) {
+  //   uint256 lhs = ((block.timestamp - streams[_user][_index].startTime) * 1000) / streams[_user][_index].frequency;
+  //   uint256 rhs = (streams[_user][_index].streamed + 1) * 1000;
+
+  //   return sub(lhs, rhs) < 0;
+  // }
+
+  function streamable(address _user, uint _index) public view returns (bool) {
+    return (streams[_user][_index].streamed *
+      streams[_user][_index].frequency +
+      (streams[_user][_index].startTime * 1000) <
+      block.timestamp * 1000);
   }
 
   receive() external payable {}
