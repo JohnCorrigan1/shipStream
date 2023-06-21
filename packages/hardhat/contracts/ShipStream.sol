@@ -73,14 +73,20 @@ contract ShipStream {
     require(streams[msg.sender][_index].endTime > block.timestamp, "Stream has ended");
     require(streams[msg.sender][_index].currentBalance > 0, "Stream has no balance");
     require(streams[msg.sender][_index].streamed < streams[msg.sender][_index].totalStreams, "Stream has ended");
-    require(ok(msg.sender, _index), "wait");
+
+    require(
+      ((block.timestamp.sub(streams[msg.sender][_index].startTime))) / (streams[msg.sender][_index].frequency) >=
+        streams[msg.sender][_index].streamed ||
+        streams[msg.sender][_index].streamed == 0,
+      "wait"
+    );
+
     require(
       ((block.timestamp.sub(streams[msg.sender][_index].startTime)).mul(10 ** 18)).div(
         streams[msg.sender][_index].frequency.mul(10 ** 18)
       ) < (streams[msg.sender][_index].streamed.add(1)),
       "missed"
     );
-
     //push string add to streams
     streams[msg.sender][_index].uploads.push(_upload);
     // streams[msg.sender][_index].uploads.push({upload: _upload, timestamp: block.timestamp});
@@ -114,11 +120,16 @@ contract ShipStream {
   }
 
   //helper function to check if stream is closeable
-  function isCloseable(address _user, uint _index) public view returns (bool) {
-    return ((streams[_user][_index].streamed * streams[_user][_index].frequency) +
-      (streams[_user][_index].startTime * 1000) +
-      streams[_user][_index].frequency <
-      block.timestamp * 1000);
+  // function isCloseable(address _user, uint _index) public view returns (bool) {
+  //   return ((streams[_user][_index].streamed * streams[_user][_index].frequency) +
+  //     (streams[_user][_index].startTime * 1000) +
+  //     streams[_user][_index].frequency <
+  //     block.timestamp * 1000);
+  // }
+
+  function isCloseable(address user, uint index) public view returns (bool) {
+    return ((streams[user][index].streamed * streams[user][index].frequency) + streams[user][index].startTime <
+      block.timestamp);
   }
 
   function withdraw() public isOwner {}
@@ -164,13 +175,6 @@ contract ShipStream {
   //returns all uploads of a specific stream of an address
   function uploadsOf(address user, uint stream) public view returns (string[] memory) {
     return streams[user][stream].uploads;
-  }
-
-  function ok(address _user, uint _index) public view returns (bool) {
-    return ((((block.timestamp.sub(streams[_user][_index].startTime))).mul(10 ** 18)) /
-      (streams[_user][_index].frequency.mul(10 ** 18)) >=
-      streams[_user][_index].streamed ||
-      streams[_user][_index].streamed == 0);
   }
 
   receive() external payable {}

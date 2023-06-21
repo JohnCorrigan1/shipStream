@@ -11,7 +11,7 @@ const ExampleUI: NextPage = () => {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree&display=swap" rel="stylesheet" />
       </MetaHeader>
-      <div className="grid 2xl:grid-cols-2 flex-grow">
+      <div className=" p-5 grid gap-5 2xl:grid-cols-2 flex-grow">
         <ShipStreamInteraction />
         <ShipStreamData />
       </div>

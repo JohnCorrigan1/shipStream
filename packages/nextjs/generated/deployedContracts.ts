@@ -274,12 +274,36 @@ const contracts = {
               inputs: [
                 {
                   internalType: "address",
-                  name: "_user",
+                  name: "user",
                   type: "address",
                 },
                 {
                   internalType: "uint256",
-                  name: "_index",
+                  name: "index",
+                  type: "uint256",
+                },
+              ],
+              name: "differenct",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "user",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "index",
                   type: "uint256",
                 },
               ],
@@ -313,54 +337,6 @@ const contracts = {
                   internalType: "string",
                   name: "",
                   type: "string",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "user",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "index",
-                  type: "uint256",
-                },
-              ],
-              name: "missednot",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "user",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "index",
-                  type: "uint256",
-                },
-              ],
-              name: "notmissed",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
                 },
               ],
               stateMutability: "view",
@@ -417,30 +393,6 @@ const contracts = {
                   internalType: "address",
                   name: "",
                   type: "address",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "_user",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "_index",
-                  type: "uint256",
-                },
-              ],
-              name: "streamMissed",
-              outputs: [
-                {
-                  internalType: "bool",
-                  name: "",
-                  type: "bool",
                 },
               ],
               stateMutability: "view",
@@ -517,54 +469,6 @@ const contracts = {
                   internalType: "struct ShipStream.Stream",
                   name: "",
                   type: "tuple",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "_user",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "_index",
-                  type: "uint256",
-                },
-              ],
-              name: "streamOpen",
-              outputs: [
-                {
-                  internalType: "bool",
-                  name: "",
-                  type: "bool",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "_user",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "_index",
-                  type: "uint256",
-                },
-              ],
-              name: "streamable",
-              outputs: [
-                {
-                  internalType: "bool",
-                  name: "",
-                  type: "bool",
                 },
               ],
               stateMutability: "view",
@@ -830,7 +734,7 @@ const contracts = {
       chainId: "11155111",
       contracts: {
         ShipStream: {
-          address: "0xF9dAbB8AFaA95817f6d87A29bfD0991b1A75dfd5",
+          address: "0x94491b52127B291b29C6c7268246C64BfCF27CD8",
           abi: [
             {
               inputs: [
@@ -957,12 +861,12 @@ const contracts = {
               inputs: [
                 {
                   internalType: "address",
-                  name: "_user",
+                  name: "user",
                   type: "address",
                 },
                 {
                   internalType: "uint256",
-                  name: "_index",
+                  name: "index",
                   type: "uint256",
                 },
               ],
@@ -1015,6 +919,30 @@ const contracts = {
                   internalType: "uint256",
                   name: "",
                   type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "_user",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "_index",
+                  type: "uint256",
+                },
+              ],
+              name: "ok",
+              outputs: [
+                {
+                  internalType: "bool",
+                  name: "",
+                  type: "bool",
                 },
               ],
               stateMutability: "view",
@@ -1104,30 +1032,6 @@ const contracts = {
                   internalType: "struct ShipStream.Stream",
                   name: "",
                   type: "tuple",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "_user",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "_index",
-                  type: "uint256",
-                },
-              ],
-              name: "streamOpen",
-              outputs: [
-                {
-                  internalType: "bool",
-                  name: "",
-                  type: "bool",
                 },
               ],
               stateMutability: "view",
@@ -1385,7 +1289,7 @@ const contracts = {
           ],
         },
         YourContract: {
-          address: "0xb8F6d15EbCc62CC00685b7E8a30a0E84E02CD245",
+          address: "0xfEca367A5D8e6611D68188757c43618c71f44caE",
           abi: [
             {
               inputs: [
