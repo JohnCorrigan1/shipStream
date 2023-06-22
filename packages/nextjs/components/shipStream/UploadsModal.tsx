@@ -12,6 +12,7 @@ interface UploadsModalProps {
 interface Uploads {
   upload: string;
   uploadTime: number;
+  transactionHash: string;
 }
 
 const UploadsModal = ({ modal, streamId }: UploadsModalProps) => {
@@ -42,7 +43,8 @@ const UploadsModal = ({ modal, streamId }: UploadsModalProps) => {
       temp.forEach(async (event: any) => {
         const upload = event.args[2];
         const uploadTime = await getTimeFromBlock(event.log.blockNumber);
-        setUploads(prev => [...prev, { upload, uploadTime }]);
+        const transactionHash = event.log.transactionHash;
+        setUploads(prev => [...prev, { upload, uploadTime, transactionHash }]);
       });
 
       // setUploads(prev =>
@@ -61,7 +63,12 @@ const UploadsModal = ({ modal, streamId }: UploadsModalProps) => {
         <div className="w-full flex flex-col gap-3">
           {uploads.length > 0 &&
             uploads.map((upload, index) => (
-              <Upload key={index} upload={upload.upload} uploadTime={upload.uploadTime.toString()} />
+              <Upload
+                key={index}
+                upload={upload.upload}
+                uploadTime={upload.uploadTime.toString()}
+                transactionHash={upload.transactionHash}
+              />
             ))}
         </div>
       </div>
