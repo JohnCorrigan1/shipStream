@@ -283,30 +283,6 @@ const contracts = {
                   type: "uint256",
                 },
               ],
-              name: "differenct",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "user",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "index",
-                  type: "uint256",
-                },
-              ],
               name: "isCloseable",
               outputs: [
                 {
@@ -356,30 +332,6 @@ const contracts = {
                   internalType: "uint256",
                   name: "",
                   type: "uint256",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "_user",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "_index",
-                  type: "uint256",
-                },
-              ],
-              name: "ok",
-              outputs: [
-                {
-                  internalType: "bool",
-                  name: "",
-                  type: "bool",
                 },
               ],
               stateMutability: "view",

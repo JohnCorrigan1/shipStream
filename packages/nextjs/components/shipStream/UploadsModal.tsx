@@ -45,9 +45,9 @@ const UploadsModal = ({ modal, streamId }: UploadsModalProps) => {
         setUploads(prev => [...prev, { upload, uploadTime }]);
       });
 
-      setUploads(prev =>
-        prev.filter((upload, index, self) => index === self.findIndex(t => t.uploadTime === upload.uploadTime)),
-      );
+      // setUploads(prev =>
+      // prev.filter((upload, index, self) => index === self.findIndex(t => t.uploadTime === upload.uploadTime)),
+      // );
 
       setUploads(prev => prev.sort((a, b) => b.uploadTime - a.uploadTime));
     }

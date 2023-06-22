@@ -36,8 +36,8 @@ const Stream = ({ stream, streamId }: StreamProps) => {
       <div className="collapse-title text-xl font-medium flex justify-between items-center">
         <h2>{stream.name}</h2>
         <p>{ethers.utils.formatEther(stream.currentBalance.toString())}</p>
-        <p>{stream.duration.toString()}</p>
-        <p>{stream.frequency.toString()}</p>
+        <p>{ethers.utils.formatEther(stream.duration.toString())}</p>
+        <p>{ethers.utils.formatEther(stream.frequency.toString())}</p>
         <p>
           {stream.streamed.toString()}/{stream.totalStreams.toString()}
         </p>
