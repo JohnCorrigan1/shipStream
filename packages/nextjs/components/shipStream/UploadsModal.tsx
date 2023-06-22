@@ -57,7 +57,7 @@ const UploadsModal = ({ modal, streamId }: UploadsModalProps) => {
   }, [uploadEvents]);
 
   return (
-    <dialog className="w-4/5 lg:w-2/3 h-2/3 xl:w-1/2 xl:h-1/2 bg-base-100 rounded-lg" ref={modal}>
+    <dialog className="w-4/5 lg:w-2/3 h-2/3 xl:w-1/2 xl:h-1/2 bg-base-100 rounded-lg scroll-smooth" ref={modal}>
       <div className="flex flex-col items-center p-5 xl:p-10 gap-5">
         <h1 className="text-2xl font-bold text-primary-content">Stream uploads</h1>
         <div className="w-full flex flex-col gap-3">

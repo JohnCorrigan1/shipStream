@@ -98,6 +98,11 @@ contract ShipStream {
 
     //send subtracted balance to msg.sender
     payable(msg.sender).transfer(streams[msg.sender][_index].startBalance / streams[msg.sender][_index].totalStreams);
+
+    if (streams[msg.sender][_index].streamed == streams[msg.sender][_index].totalStreams) {
+      closeStream(msg.sender, _index);
+    }
+
     emit StringUploaded(msg.sender, _index, _upload);
   }
 
@@ -119,17 +124,10 @@ contract ShipStream {
     streams[_user].pop();
   }
 
-  //helper function to check if stream is closeable
-  // function isCloseable(address _user, uint _index) public view returns (bool) {
-  //   return ((streams[_user][_index].streamed * streams[_user][_index].frequency) +
-  //     (streams[_user][_index].startTime * 1000) +
-  //     streams[_user][_index].frequency <
-  //     block.timestamp * 1000);
-  // }
-
   function isCloseable(address user, uint index) public view returns (bool) {
     return ((streams[user][index].streamed * streams[user][index].frequency) + streams[user][index].startTime <
-      block.timestamp);
+      block.timestamp ||
+      streams[user][index].streamed == streams[user][index].totalStreams);
   }
 
   function withdraw() public isOwner {}

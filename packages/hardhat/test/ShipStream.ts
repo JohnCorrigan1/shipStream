@@ -93,5 +93,20 @@ describe("ShipStream", function () {
       await shipStream.closeStream(owner.address, 0);
       expect(await shipStream.numStreams(owner.address)).to.equal(0);
     });
+
+    it("should allow another stream to be created", async function () {
+      await shipStream.createStream(20, 10, "test stream", { value: ethers.utils.parseEther("1") });
+      expect(await shipStream.totalStreams()).to.equal(1);
+    });
+
+    it("should allow both delete stream after all streams have been streamed", async function () {
+      const [owner] = await ethers.getSigners();
+      await shipStream.uploadString("test", 0);
+      await ethers.provider.send("evm_increaseTime", [15]);
+      await ethers.provider.send("evm_mine", []);
+      await shipStream.uploadString("test", 0);
+      expect(await shipStream.numStreams(owner.address)).to.equal(0);
+      expect(await shipStream.totalStreams()).to.equal(0);
+    });
   });
 });
