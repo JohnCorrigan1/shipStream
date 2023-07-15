@@ -1,9 +1,7 @@
 import type { NextPage } from "next";
 import { MetaHeader } from "~~/components/MetaHeader";
-import ShipStreamData from "~~/components/shipStream/ShipStreamData";
-import ShipStreamInteraction from "~~/components/shipStream/ShipStreamInteraction";
 
-const ShipStream: NextPage = () => {
+const Closeable: NextPage = () => {
   return (
     <>
       <MetaHeader title="Ship Steam | Scaffold-ETH 2" description="Ship Stream created with 🏗 Scaffold-ETH 2">
@@ -11,11 +9,10 @@ const ShipStream: NextPage = () => {
         <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree&display=swap" rel="stylesheet" />
       </MetaHeader>
       <div className=" p-5 grid gap-5 2xl:grid-cols-2 flex-grow">
-        <ShipStreamInteraction />
-        <ShipStreamData />
+        <p>closeable</p>
       </div>
     </>
   );
 };
 
-export default ShipStream;
+export default Closeable;

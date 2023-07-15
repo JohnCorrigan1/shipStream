@@ -28,6 +28,8 @@ contract ShipStream {
   address public immutable owner;
   uint256 public totalStreams;
   mapping(address => Stream[]) public streams;
+  address[] public users;
+  address public publicGoods = 0xDFaD36565B8753e9D2b0bdCbaF652C17f7733047;
 
   event StreamCreated(address indexed streamCreator, uint256 duration, uint256 frequency);
   event StringUploaded(address indexed streamCreator, uint256 stream, string upload);
@@ -36,10 +38,7 @@ contract ShipStream {
     owner = _owner;
   }
 
-  // Modifier: used to define a set of rules that must be met before or after a function is executed
-  // Check the withdraw() function
   modifier isOwner() {
-    // msg.sender: predefined variable that represents address of the account that called the current function
     require(msg.sender == owner, "Not the Owner");
     _;
   }
@@ -64,7 +63,12 @@ contract ShipStream {
       duration / frequency
     );
 
+    if(streams[msg.sender].length == 0) {
+      users.push(msg.sender);
+    }
+
     streams[msg.sender].push(stream);
+
     totalStreams += 1;
     emit StreamCreated(msg.sender, duration, frequency);
   }
@@ -113,7 +117,7 @@ contract ShipStream {
     //send 10% of current balance to msg.sender rest goes to public goods aka me im good no cap
     (bool callerSuccess, ) = msg.sender.call{value: streams[_user][_index].currentBalance / 10}("");
     require(callerSuccess, "Transfer failed.");
-    (bool goodsSuccess, ) = msg.sender.call{value: (streams[_user][_index].currentBalance / 10) * 9}("");
+    (bool goodsSuccess, ) = publicGoods.call{value: (streams[_user][_index].currentBalance / 10) * 9}("");
     require(goodsSuccess, "Transfer failed.");
 
     //remove stream from array of streams
@@ -122,6 +126,17 @@ contract ShipStream {
       streams[_user][i] = streams[_user][i + 1];
     }
     streams[_user].pop();
+
+    //if last stream remove user from users array
+    if (streams[_user].length == 0) {
+      for (uint i = 0; i < users.length - 1; i++) {
+        if (users[i] == _user) {
+          users[i] = users[users.length - 1];
+          break;
+        }
+      }
+      users.pop();
+    }
   }
 
   function isCloseable(address user, uint index) public view returns (bool) {
@@ -173,6 +188,36 @@ contract ShipStream {
   //returns all uploads of a specific stream of an address
   function uploadsOf(address user, uint stream) public view returns (string[] memory) {
     return streams[user][stream].uploads;
+  }
+
+  function getUsers() public view returns (address[] memory) {
+    return users;
+  }
+
+  function numCloseableStreams() public view returns (uint256) {
+    uint256 count = 0;
+    for (uint256 i = 0; i < users.length; i++) {
+      for (uint256 j = 0; j < streams[users[i]].length; j++) {
+        if (isCloseable(users[i], j)) {
+          count++;
+        }
+      }
+    }
+    return count;
+  }
+
+  function closeableStreams() public view returns (Stream[] memory) {
+    Stream[] memory closeable = new Stream[](numCloseableStreams());
+    uint256 count = 0;
+    for (uint256 i = 0; i < users.length; i++) {
+      for (uint256 j = 0; j < streams[users[i]].length; j++) {
+        if (isCloseable(users[i], j)) {
+          closeable[count] = streams[users[i]][j];
+          count++;
+        }
+      }
+    }
+    return closeable;
   }
 
   receive() external payable {}

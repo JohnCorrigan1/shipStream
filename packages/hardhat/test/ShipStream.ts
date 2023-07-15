@@ -109,4 +109,39 @@ describe("ShipStream", function () {
       expect(await shipStream.totalStreams()).to.equal(0);
     });
   });
+
+  describe("Deployment 2", function () {
+    console.log("Deploying 2nd time");
+    it("Should have 0 streams on deploy", async function () {
+      expect(await shipStream.totalStreams()).to.equal(0);
+    });
+
+    it("users should have 1 address after creating a stream", async function () {
+      await shipStream.createStream(1000, 100, "test stream", { value: ethers.utils.parseEther("2") });
+      const users = await shipStream.getUsers();
+      expect(users.length).to.equal(1);
+    });
+
+    it("users should have 2 address after 2nd address creates stream", async function () {
+      const [owner, user] = await ethers.getSigners();
+      await shipStream.connect(user).createStream(2000, 1000, "test stream", { value: ethers.utils.parseEther("1") });
+      const users = await shipStream.getUsers();
+      console.log(owner.address, user.address, users);
+      expect(users.length).to.equal(2);
+    });
+
+    it("should have one closeable stream", async function () {
+      const closeable = await shipStream.closeableStreams();
+      expect(closeable.length).to.equal(1);
+      expect(closeable[0].currentBalance).to.equal(ethers.utils.parseEther("2"));
+    });
+
+    it("users should have one address after closing first stream", async function () {
+      const [owner, user] = await ethers.getSigners();
+      await shipStream.closeStream(owner.address, 0);
+      const users = await shipStream.getUsers();
+      expect(users.length).to.equal(1);
+      expect(users[0]).to.equal(user.address);
+    });
+  });
 });
