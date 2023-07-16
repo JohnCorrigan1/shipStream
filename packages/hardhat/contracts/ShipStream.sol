@@ -25,6 +25,11 @@ contract ShipStream {
     uint256 totalStreams;
   }
 
+   struct CloseableStream {
+     address user;
+     uint index;
+   }
+
   address public immutable owner;
   uint256 public totalStreams;
   mapping(address => Stream[]) public streams;
@@ -206,18 +211,25 @@ contract ShipStream {
     return count;
   }
 
-  function closeableStreams() public view returns (Stream[] memory) {
-    Stream[] memory closeable = new Stream[](numCloseableStreams());
+  function closeableStreams() public view returns (CloseableStream[] memory) {
+    CloseableStream[] memory closeable = new CloseableStream[](numCloseableStreams());
     uint256 count = 0;
     for (uint256 i = 0; i < users.length; i++) {
       for (uint256 j = 0; j < streams[users[i]].length; j++) {
         if (isCloseable(users[i], j)) {
-          closeable[count] = streams[users[i]][j];
+          closeable[count] = CloseableStream(users[i], j);
           count++;
         }
       }
     }
     return closeable;
+  }
+
+  function closeAllCloseableStreams() public {
+    CloseableStream[] memory closeable = closeableStreams();
+    for (uint256 i = 0; i < closeable.length; i++) {
+      closeStream(closeable[i].user, closeable[i].index);
+    }
   }
 
   receive() external payable {}

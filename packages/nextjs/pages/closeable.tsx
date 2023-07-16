@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import { MetaHeader } from "~~/components/MetaHeader";
+import CloseableStreams from "~~/components/shipStream/CloseableStreams";
 
 const Closeable: NextPage = () => {
   return (
@@ -10,6 +11,7 @@ const Closeable: NextPage = () => {
       </MetaHeader>
       <div className=" p-5 grid gap-5 2xl:grid-cols-2 flex-grow">
         <p>closeable</p>
+        <CloseableStreams />
       </div>
     </>
   );

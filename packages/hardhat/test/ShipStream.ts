@@ -3,8 +3,6 @@ import { ethers } from "hardhat";
 import { ShipStream } from "../typechain-types";
 
 describe("ShipStream", function () {
-  // We define a fixture to reuse the same setup in every test.
-
   let shipStream: ShipStream;
   before(async () => {
     const [owner] = await ethers.getSigners();
@@ -133,7 +131,8 @@ describe("ShipStream", function () {
     it("should have one closeable stream", async function () {
       const closeable = await shipStream.closeableStreams();
       expect(closeable.length).to.equal(1);
-      expect(closeable[0].currentBalance).to.equal(ethers.utils.parseEther("2"));
+      const stream = await shipStream.streamOf(closeable[0].user, closeable[0].index);
+      expect(stream.currentBalance).to.equal(ethers.utils.parseEther("2"));
     });
 
     it("users should have one address after closing first stream", async function () {
@@ -142,6 +141,21 @@ describe("ShipStream", function () {
       const users = await shipStream.getUsers();
       expect(users.length).to.equal(1);
       expect(users[0]).to.equal(user.address);
+    });
+
+    it("users should have two addresss after opening a new stream", async function () {
+      await shipStream.createStream(1000, 100, "test stream", { value: ethers.utils.parseEther("1") });
+      const users = await shipStream.getUsers();
+      expect(users.length).to.equal(2);
+    });
+
+    it("should be able to close multiple streams at once", async function () {
+      await ethers.provider.send("evm_increaseTime", [2000]);
+      await ethers.provider.send("evm_mine", []);
+      await shipStream.closeAllCloseableStreams();
+      const users = await shipStream.getUsers();
+      expect(users.length).to.equal(0);
+      expect(await shipStream.totalStreams()).to.equal(0);
     });
   });
 });

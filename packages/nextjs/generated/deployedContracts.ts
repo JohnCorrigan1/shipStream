@@ -5,7 +5,7 @@ const contracts = {
       chainId: "31337",
       contracts: {
         ShipStream: {
-          address: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+          address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
           abi: [
             {
               inputs: [
@@ -88,6 +88,13 @@ const contracts = {
               type: "function",
             },
             {
+              inputs: [],
+              name: "closeAllCloseableStreams",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
               inputs: [
                 {
                   internalType: "address",
@@ -112,57 +119,17 @@ const contracts = {
                 {
                   components: [
                     {
-                      internalType: "string",
-                      name: "name",
-                      type: "string",
+                      internalType: "address",
+                      name: "user",
+                      type: "address",
                     },
                     {
                       internalType: "uint256",
-                      name: "duration",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "frequency",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "startTime",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "endTime",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "startBalance",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "currentBalance",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "string[]",
-                      name: "uploads",
-                      type: "string[]",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "streamed",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "totalStreams",
+                      name: "index",
                       type: "uint256",
                     },
                   ],
-                  internalType: "struct ShipStream.Stream[]",
+                  internalType: "struct ShipStream.CloseableStream[]",
                   name: "",
                   type: "tuple[]",
                 },
@@ -255,6 +222,19 @@ const contracts = {
               type: "function",
             },
             {
+              inputs: [],
+              name: "numCloseableStreams",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
               inputs: [
                 {
                   internalType: "address",
@@ -276,6 +256,19 @@ const contracts = {
             {
               inputs: [],
               name: "owner",
+              outputs: [
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "publicGoods",
               outputs: [
                 {
                   internalType: "address",
