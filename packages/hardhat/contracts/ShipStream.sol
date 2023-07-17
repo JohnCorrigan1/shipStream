@@ -11,7 +11,9 @@ pragma solidity >=0.8.0 <0.9.0;
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract ShipStream {
+
   using SafeMath for uint256;
+
   struct Stream {
     string name;
     uint256 duration;
@@ -29,6 +31,11 @@ contract ShipStream {
      address user;
      uint index;
    }
+
+  struct CloseableDistribution {
+    uint256 publicGoods;
+    uint256 closer;
+  }
 
   address public immutable owner;
   uint256 public totalStreams;
@@ -223,6 +230,16 @@ contract ShipStream {
       }
     }
     return closeable;
+  }
+
+  function closeableStreamsDistribution() public view returns (CloseableDistribution memory) {
+    CloseableDistribution memory distribution;
+    CloseableStream[] memory closeable = closeableStreams();
+    for (uint256 i = 0; i < closeable.length; i++) {
+      distribution.publicGoods += (streams[closeable[i].user][closeable[i].index].currentBalance / 10) * 9;
+      distribution.closer += streams[closeable[i].user][closeable[i].index].currentBalance / 10;
+    }
+    return distribution;
   }
 
   function closeAllCloseableStreams() public {
