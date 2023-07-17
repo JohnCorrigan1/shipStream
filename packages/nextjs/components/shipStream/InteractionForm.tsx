@@ -3,21 +3,25 @@ import { ethers } from "ethers";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
 const InteractionForm = () => {
-  const [duration, setDuration] = useState(0);
-  const [frequency, setFrequency] = useState(0);
-  const [amount, setAmount] = useState(0);
+  const [duration, setDuration] = useState("0");
+  const [frequency, setFrequency] = useState("0");
+  const [amount, setAmount] = useState("0");
   const [name, setName] = useState("");
 
   const { writeAsync } = useScaffoldContractWrite({
     contractName: "ShipStream",
     functionName: "createStream",
     args: [
-      duration > 0 ? ethers.utils.parseEther(duration.toString()) : ethers.utils.parseEther("0"),
-      frequency > 0 ? ethers.utils.parseEther(frequency.toString()) : ethers.utils.parseEther("0"),
+      parseFloat(duration) > 0
+        ? ethers.utils.parseEther((parseFloat(duration) * 3600).toString())
+        : ethers.utils.parseEther("0"),
+      parseFloat(frequency) > 0
+        ? ethers.utils.parseEther((parseFloat(frequency) * 3600).toString())
+        : ethers.utils.parseEther("0"),
       name,
     ],
     overrides: {
-      value: amount > 0 ? ethers.utils.parseEther(amount.toString()) : ethers.utils.parseEther("0"),
+      value: parseFloat(amount) > 0 ? ethers.utils.parseEther(amount.toString()) : ethers.utils.parseEther("0"),
     },
   });
 
@@ -34,9 +38,9 @@ const InteractionForm = () => {
         />
       </div>
       <div className="flex flex-col">
-        <label className="">Duration (s)</label>
+        <label className="">Duration (hrs)</label>
         <input
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDuration(parseInt(e.target.value))}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDuration(e.target.value)}
           type="number"
           value={duration}
           placeholder="duration"
@@ -44,9 +48,9 @@ const InteractionForm = () => {
         />
       </div>
       <div className="flex flex-col">
-        <label className="">Frequency (s)</label>
+        <label className="">Frequency (hrs)</label>
         <input
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFrequency(parseInt(e.target.value))}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFrequency(e.target.value)}
           type="number"
           value={frequency}
           placeholder="frequency"
@@ -56,7 +60,7 @@ const InteractionForm = () => {
       <div className="flex flex-col">
         <label className="">Amount (ETH)</label>
         <input
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAmount(parseInt(e.target.value))}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAmount(e.target.value)}
           type="number"
           value={amount}
           placeholder="amount"

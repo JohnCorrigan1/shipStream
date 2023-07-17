@@ -31,13 +31,13 @@ const Stream = ({ stream, streamId }: StreamProps) => {
   };
 
   return (
-    <div className="collapse collapse-arrow bg-base-200 glass">
+    <div className="collapse collapse-arrow bg-base-200 glass max-w-full">
       <input type="radio" name="my-accordion-2" />
-      <div className="collapse-title text-xl font-medium flex justify-between items-center">
+      <div className="collapse-title text-xl font-medium flex justify-between items-center max-w-full">
         <h2>{stream.name}</h2>
-        <p>{ethers.utils.formatEther(stream.currentBalance.toString())}</p>
-        <p>{ethers.utils.formatEther(stream.duration.toString())}</p>
-        <p>{ethers.utils.formatEther(stream.frequency.toString())}</p>
+        <p>{parseFloat(ethers.utils.formatEther(stream.currentBalance.toString())).toFixed(2)} eth</p>
+        <p>{(parseFloat(ethers.utils.formatEther(stream.duration.toString())) / 3600).toFixed(2)} hrs</p>
+        <p>{(parseFloat(ethers.utils.formatEther(stream.frequency.toString())) / 3600).toFixed(2)} hrs</p>
         <p>
           {stream.streamed.toString()}/{stream.totalStreams.toString()}
         </p>
@@ -57,7 +57,7 @@ const Stream = ({ stream, streamId }: StreamProps) => {
         <div className="flex flex-col gap-3 w-1/2">
           <div className="textarea textarea-bordered rounded-xl h-full w-full">
             <h2>Last Upload:</h2>
-            <p>{lastUpload}</p>
+            <p className=" break-all">{lastUpload}</p>
           </div>
 
           <button onClick={showModal} className="btn btn-primary">
