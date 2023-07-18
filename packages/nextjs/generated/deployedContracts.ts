@@ -659,7 +659,7 @@ const contracts = {
       chainId: "11155111",
       contracts: {
         ShipStream: {
-          address: "0x926EeFb02BC0b03A35689C93C1D3A7e883194f26",
+          address: "0x975E9AaEeb9171eB0603aBDB0A155E90A676B822",
           abi: [
             {
               inputs: [

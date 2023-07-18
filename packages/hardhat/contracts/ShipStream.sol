@@ -1,18 +1,9 @@
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-// import "./SafeMath.sol";
-
-// Useful for debugging. Remove when deploying to a live network.
-// import "hardhat/console.sol";
-
-// Use openzeppelin to inherit battle-tested implementations (ERC20, ERC721, etc)
 // import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract ShipStream {
-
-  using SafeMath for uint256;
 
   struct Stream {
     string name;
@@ -97,20 +88,15 @@ contract ShipStream {
       "wait"
     );
 
-    require(
-      ((block.timestamp.sub(streams[msg.sender][_index].startTime)).mul(10 ** 18)).div(
-        streams[msg.sender][_index].frequency.mul(10 ** 18)
-      ) < (streams[msg.sender][_index].streamed.add(1)),
-      "missed"
-    );
+   require((block.timestamp - streams[msg.sender][_index].startTime) / streams[msg.sender][_index].frequency <
+      streams[msg.sender][_index].streamed + 1, "missed");
     //push string add to streams
     streams[msg.sender][_index].uploads.push(_upload);
-    // streams[msg.sender][_index].uploads.push({upload: _upload, timestamp: block.timestamp});
     streams[msg.sender][_index].streamed += 1;
     //subtract from bal
     streams[msg.sender][_index].currentBalance -=
-      streams[msg.sender][_index].startBalance /
-      streams[msg.sender][_index].totalStreams;
+    streams[msg.sender][_index].startBalance /
+    streams[msg.sender][_index].totalStreams;
 
     //send subtracted balance to msg.sender
     payable(msg.sender).transfer(streams[msg.sender][_index].startBalance / streams[msg.sender][_index].totalStreams);
