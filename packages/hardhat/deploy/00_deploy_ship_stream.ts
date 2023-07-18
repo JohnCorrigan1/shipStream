@@ -24,7 +24,7 @@ const deployShipStream: DeployFunction = async function (hre: HardhatRuntimeEnvi
   await deploy("ShipStream", {
     from: deployer,
     // Contract constructor arguments
-    args: [deployer],
+    args: ["0xDFaD36565B8753e9D2b0bdCbaF652C17f7733047"],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.

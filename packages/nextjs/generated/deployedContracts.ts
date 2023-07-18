@@ -659,7 +659,7 @@ const contracts = {
       chainId: "11155111",
       contracts: {
         ShipStream: {
-          address: "0x975E9AaEeb9171eB0603aBDB0A155E90A676B822",
+          address: "0x1faBa0b73d179F0Fa398462F61844Cbaa8E4F247",
           abi: [
             {
               inputs: [
@@ -671,6 +671,25 @@ const contracts = {
               ],
               stateMutability: "nonpayable",
               type: "constructor",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "previousOwner",
+                  type: "address",
+                },
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "newOwner",
+                  type: "address",
+                },
+              ],
+              name: "OwnershipTransferred",
+              type: "event",
             },
             {
               anonymous: false,
@@ -959,6 +978,13 @@ const contracts = {
               type: "function",
             },
             {
+              inputs: [],
+              name: "renounceOwnership",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
               inputs: [
                 {
                   internalType: "address",
@@ -1228,6 +1254,19 @@ const contracts = {
                 },
               ],
               stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "newOwner",
+                  type: "address",
+                },
+              ],
+              name: "transferOwnership",
+              outputs: [],
+              stateMutability: "nonpayable",
               type: "function",
             },
             {

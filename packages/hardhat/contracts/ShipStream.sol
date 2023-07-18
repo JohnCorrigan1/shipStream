@@ -1,9 +1,9 @@
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-// import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract ShipStream {
+contract ShipStream is Ownable {
 
   struct Stream {
     string name;
@@ -28,7 +28,7 @@ contract ShipStream {
     uint256 closer;
   }
 
-  address public immutable owner;
+  // address public immutable owner;
   uint256 public totalStreams;
   mapping(address => Stream[]) public streams;
   address[] public users;
@@ -38,13 +38,9 @@ contract ShipStream {
   event StringUploaded(address indexed streamCreator, uint256 stream, string upload);
 
   constructor(address _owner) {
-    owner = _owner;
+    transferOwnership(_owner);
   }
 
-  modifier isOwner() {
-    require(msg.sender == owner, "Not the Owner");
-    _;
-  }
 
   function createStream(uint256 duration, uint256 frequency, string memory name) public payable {
     require(msg.value > 0, "Must send ether to create a stream");
@@ -82,7 +78,7 @@ contract ShipStream {
     require(streams[msg.sender][_index].streamed < streams[msg.sender][_index].totalStreams, "Stream has ended");
 
     require(
-      ((block.timestamp.sub(streams[msg.sender][_index].startTime))) / (streams[msg.sender][_index].frequency) >=
+      (block.timestamp - streams[msg.sender][_index].startTime) / streams[msg.sender][_index].frequency >=
         streams[msg.sender][_index].streamed ||
         streams[msg.sender][_index].streamed == 0,
       "wait"
@@ -99,7 +95,8 @@ contract ShipStream {
     streams[msg.sender][_index].totalStreams;
 
     //send subtracted balance to msg.sender
-    payable(msg.sender).transfer(streams[msg.sender][_index].startBalance / streams[msg.sender][_index].totalStreams);
+    (bool success, ) = msg.sender.call{value: streams[msg.sender][_index].startBalance / streams[msg.sender][_index].totalStreams}("");
+    require(success, "Transfer failed.");
 
     if (streams[msg.sender][_index].streamed == streams[msg.sender][_index].totalStreams) {
       closeStream(msg.sender, _index);
@@ -143,7 +140,10 @@ contract ShipStream {
       streams[user][index].streamed == streams[user][index].totalStreams);
   }
 
-  function withdraw() public isOwner {}
+  function withdraw() public onlyOwner {
+    (bool success, ) = msg.sender.call{value: address(this).balance}("");
+    require(success, "Transfer failed.");
+  }
 
   //address' balance of all their streams
   function balanceOf(address user) public view returns (uint256) {
