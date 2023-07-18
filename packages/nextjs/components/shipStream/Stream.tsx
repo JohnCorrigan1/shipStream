@@ -36,8 +36,8 @@ const Stream = ({ stream, streamId }: StreamProps) => {
       <div className="collapse-title text-xl font-medium flex justify-between items-center max-w-full">
         <h2>{stream.name}</h2>
         <p>{parseFloat(ethers.utils.formatEther(stream.currentBalance.toString())).toFixed(2)} eth</p>
-        <p>{(parseFloat(ethers.utils.formatEther(stream.duration.toString())) / 3600).toFixed(2)} hrs</p>
-        <p>{(parseFloat(ethers.utils.formatEther(stream.frequency.toString())) / 3600).toFixed(2)} hrs</p>
+        <p>{(parseFloat(stream.duration.toString()) / 3600).toFixed(2)} hrs</p>
+        <p>{(parseFloat(stream.frequency.toString()) / 3600).toFixed(2)} hrs</p>
         <p>
           {stream.streamed.toString()}/{stream.totalStreams.toString()}
         </p>

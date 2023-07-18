@@ -12,12 +12,14 @@ const InteractionForm = () => {
     contractName: "ShipStream",
     functionName: "createStream",
     args: [
-      parseFloat(duration) > 0
-        ? ethers.utils.parseEther((parseFloat(duration) * 3600).toString())
-        : ethers.utils.parseEther("0"),
-      parseFloat(frequency) > 0
-        ? ethers.utils.parseEther((parseFloat(frequency) * 3600).toString())
-        : ethers.utils.parseEther("0"),
+      /* parseFloat(duration) > 0 */
+      /* ? ethers.utils.parseEther((parseFloat(duration) * 3600).toString()) */
+      /* : ethers.utils.parseEther("0"), */
+      /* parseFloat(frequency) > 0 */
+      /* ? ethers.utils.parseEther((parseFloat(frequency) * 3600).toString()) */
+      /* : ethers.utils.parseEther("0"), */
+      parseFloat(duration) > 0 ? ethers.BigNumber.from(parseFloat(duration) * 3600) : ethers.BigNumber.from(0),
+      parseFloat(frequency) > 0 ? ethers.BigNumber.from(parseFloat(frequency) * 3600) : ethers.BigNumber.from(0),
       name,
     ],
     overrides: {
