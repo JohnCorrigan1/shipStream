@@ -14,6 +14,7 @@ contract ShipStream is Ownable {
     uint256 startBalance;
     uint256 currentBalance;
     string[] uploads;
+    uint256[] uploadTimes;
     uint256 streamed;
     uint256 totalStreams;
   }
@@ -28,6 +29,11 @@ contract ShipStream is Ownable {
     uint256 closer;
   }
 
+  struct Uploads {
+    string upload;
+    uint256 uploadTime;
+  }
+
   // address public immutable owner;
   uint256 public totalStreams;
   mapping(address => Stream[]) public streams;
@@ -35,7 +41,7 @@ contract ShipStream is Ownable {
   address public publicGoods = 0xDFaD36565B8753e9D2b0bdCbaF652C17f7733047;
 
   event StreamCreated(address indexed streamCreator, uint256 duration, uint256 frequency);
-  event StringUploaded(address indexed streamCreator, uint256 stream, string upload);
+  event StringUploaded(address indexed streamCreator, uint256 stream, string upload, uint256 timestamp);
 
   constructor(address _owner) {
     transferOwnership(_owner);
@@ -58,6 +64,7 @@ contract ShipStream is Ownable {
       msg.value,
       msg.value,
       new string[](0),
+      new uint256[](0),
       0,
       duration / frequency
     );
@@ -88,6 +95,7 @@ contract ShipStream is Ownable {
       streams[msg.sender][_index].streamed + 1, "missed");
     //push string add to streams
     streams[msg.sender][_index].uploads.push(_upload);
+    streams[msg.sender][_index].uploadTimes.push(block.timestamp);
     streams[msg.sender][_index].streamed += 1;
     //subtract from bal
     streams[msg.sender][_index].currentBalance -=
@@ -102,7 +110,7 @@ contract ShipStream is Ownable {
       closeStream(msg.sender, _index);
     }
 
-    emit StringUploaded(msg.sender, _index, _upload);
+    emit StringUploaded(msg.sender, _index, _upload, block.timestamp);
   }
 
   function closeStream(address _user, uint _index) public {
@@ -184,8 +192,14 @@ contract ShipStream is Ownable {
   }
 
   //returns all uploads of a specific stream of an address
-  function uploadsOf(address user, uint stream) public view returns (string[] memory) {
-    return streams[user][stream].uploads;
+  function uploadsOf(address user, uint stream) public view returns (Uploads[] memory) {
+    Uploads[] memory uploads = new Uploads[](streams[user][stream].uploads.length);
+    for(uint i = 0; i < streams[user][stream].uploads.length; i++) {
+      uploads[i].upload = streams[user][stream].uploads[i];
+      uploads[i].uploadTime = streams[user][stream].uploadTimes[i];
+
+    }
+    return uploads;
   }
 
   function getUsers() public view returns (address[] memory) {

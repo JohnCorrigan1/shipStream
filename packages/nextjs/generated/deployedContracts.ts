@@ -659,7 +659,7 @@ const contracts = {
       chainId: "11155111",
       contracts: {
         ShipStream: {
-          address: "0x1faBa0b73d179F0Fa398462F61844Cbaa8E4F247",
+          address: "0xAA2CFc4812d38EEF0bf376d69dF826cF5a234895",
           abi: [
             {
               inputs: [
@@ -736,6 +736,12 @@ const contracts = {
                   internalType: "string",
                   name: "upload",
                   type: "string",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "timestamp",
+                  type: "uint256",
                 },
               ],
               name: "StringUploaded",
@@ -1042,6 +1048,11 @@ const contracts = {
                       type: "string[]",
                     },
                     {
+                      internalType: "uint256[]",
+                      name: "uploadTimes",
+                      type: "uint256[]",
+                    },
+                    {
                       internalType: "uint256",
                       name: "streamed",
                       type: "uint256",
@@ -1201,6 +1212,11 @@ const contracts = {
                       type: "string[]",
                     },
                     {
+                      internalType: "uint256[]",
+                      name: "uploadTimes",
+                      type: "uint256[]",
+                    },
+                    {
                       internalType: "uint256",
                       name: "streamed",
                       type: "uint256",
@@ -1303,9 +1319,21 @@ const contracts = {
               name: "uploadsOf",
               outputs: [
                 {
-                  internalType: "string[]",
+                  components: [
+                    {
+                      internalType: "string",
+                      name: "upload",
+                      type: "string",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "uploadTime",
+                      type: "uint256",
+                    },
+                  ],
+                  internalType: "struct ShipStream.Uploads[]",
                   name: "",
-                  type: "string[]",
+                  type: "tuple[]",
                 },
               ],
               stateMutability: "view",
