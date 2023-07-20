@@ -13,7 +13,7 @@ const CloseableStats = () => {
         <div className="stat-title">You get</div>
         {stats ? (
           <div className="stat-value text-primary">
-            {ethers.utils.formatEther(ethers.BigNumber.from(stats?.closer))} eth
+            {parseFloat(ethers.utils.formatEther(ethers.BigNumber.from(stats?.closer))).toFixed(2)} eth
           </div>
         ) : (
           <div className="stat-value text-primary">...</div>
@@ -24,7 +24,7 @@ const CloseableStats = () => {
         <div className="stat-title">To public goods</div>
         {stats ? (
           <div className="stat-value text-secondary">
-            {ethers.utils.formatEther(ethers.BigNumber.from(stats?.publicGoods))} eth
+            {parseFloat(ethers.utils.formatEther(ethers.BigNumber.from(stats?.publicGoods))).toFixed(2)} eth
           </div>
         ) : (
           <div className="stat-value text-secondary">...</div>
